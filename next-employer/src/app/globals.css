@@ -80,6 +80,16 @@
   --btn-primary: #7741FB;
   --black: oklch(0 0 0);
   --avatar: rgba(208, 193, 244, 1);
+  --subtitle: #545455;
+  --title: rgba(11, 11, 12, 1);
+}
+
+.color-title {
+  color: var(--title);
+}
+
+.color-subtitle {
+  color: var(--subtitle);
 }
 
 .btn-primary,
@@ -158,5 +168,5 @@
   font-family: Inter, sans-serif;
   font-style: normal;
   font-weight: normal;
-  src: url("/next-employer/next-employer/src/static/fonts/Inter.ttf") format("woff2");
+  src: url("/next-employer/next-employer/public/fonts/Inter-VariableFont_opsz\,wght.ttf") format("trueType");
 }
