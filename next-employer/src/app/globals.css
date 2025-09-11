@@ -41,6 +41,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --font-display: "Inter", sans-serif;
 }
 
 :root {
@@ -76,6 +77,38 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --btn-primary: #7741FB;
+  --black: oklch(0 0 0);
+  --avatar: rgba(208, 193, 244, 1);
+}
+
+.btn-primary,
+.btn-seconday,
+.btn-third {
+  border-radius: 8px;
+  color: var(--popover);
+  font-weight: 700;
+}
+
+.btn-primary {
+  background: var(--btn-primary);
+}
+
+.btn-secondary {
+  background-color: var(--black);
+}
+
+.btn-third {
+  background: var(--popover);
+  color: var(--black);
+}
+
+.bg-primary-color {
+  background-color: var(--btn-primary);
+}
+
+.bg-avatar {
+  background: var(--avatar);
 }
 
 .dark {
@@ -119,4 +152,11 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@font-face {
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  src: url("/next-employer/next-employer/src/static/fonts/Inter.ttf") format("woff2");
 }
