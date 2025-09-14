@@ -33,9 +33,14 @@ import plussvg from "@/static/images/svg/plus.svg";
 
 import "./employerDataTable.scss"
 import Image from "next/image"
-import { columns, listEmployer } from "./columns";
+import { columns } from "./columns";
+import { useRouter } from "next/navigation";
+import getEmployers from "@/api/CRUD";
+import useContextGlobal from "@/context/contextZustand"
 
 export function DataTableDemo() {
+  const {listEmployers, setListEmployers} = useContextGlobal();
+  const [showListEmployers, setsShowListEmployers] = React.useState(listEmployers);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -45,7 +50,7 @@ export function DataTableDemo() {
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data: listEmployer,
+    data: showListEmployers,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -63,6 +68,22 @@ export function DataTableDemo() {
     },
   })
 
+  const router = useRouter();
+
+  const handleAddOrEditEmployer = () => {
+    router.push('/AddOrUpdate');
+  }
+
+  React.useEffect(() => {
+    const getListEmployers = async() => {
+      const response = await getEmployers();
+      setsShowListEmployers(response);
+      setListEmployers(response);
+    }
+
+    getListEmployers()
+  }, []);
+
   return (
     <div className="w-full mt-3">
       <div className="flex items-center py-4">
@@ -75,7 +96,7 @@ export function DataTableDemo() {
           className="max-w-sm font-normal"
         />
         <DropdownMenu>
-            <Button className="ml-auto bg-primary-color cursor-pointer font-bold">
+            <Button className="ml-auto bg-primary-color cursor-pointer font-bold" onClick={handleAddOrEditEmployer}>
                 <Image width={14} height={14} src={plussvg} alt="adicionar funcionário" />
                 Novo Funcionário
             </Button>
