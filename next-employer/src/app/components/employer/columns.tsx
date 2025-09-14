@@ -6,70 +6,12 @@ import trashsvg from "@/static/images/svg/trash.svg";
 import {
   ColumnDef,
 } from "@tanstack/react-table"
-
-export type Employer = {
-    id: string
-    name: string
-    email: string
-    cpf: string
-    phone: string
-    birthDate: string
-    typeContract: "CLT" | "PJ"
-    status: "ativo" | "inativo"
-}
-
-export const listEmployer: Employer[] = [
-  {
-    id: "m5gr84i9",
-    name:"Patrick say jonh",
-    email: "pati@gmail.com",
-    cpf: "322.432.566-23",
-    phone: "+55 85 3423-4324",
-    birthDate: "27/02/2011",
-    typeContract: "PJ",
-    status: "inativo"
-  },
-  {
-    id: "3u1reuv4",
-    name: "Artur cabral silva",
-    email: "tutu@gmail.com",
-    cpf: "972.453.213-23",
-    phone: "+55 85 2344-4324",
-    birthDate: "08/08/1997",
-    typeContract: "CLT",
-    status: "ativo"
-  },
-  {
-    id: "derv1ws0",
-    name: "karliane lima de oliveira",
-    email: "kana@gmail.com",
-    cpf: "423.432.123-23",
-    phone: "+55 85 1233-3232",
-    birthDate: "19/09/2021",
-    typeContract: "CLT",
-    status: "ativo"
-  },
-  {
-    id: "5kma53ae",
-    name: "Marilia santos pinto",
-    email: "marisapinto@gmail.com",
-    cpf: "231.312.123-23",
-    phone: "+55 85 2424-4234",
-    birthDate: "10/02/2022",
-    typeContract: "PJ",
-    status: "inativo",
-  },
-  {
-    id: "bhqecj4p",
-    name: "Joao naruto",
-    email: "narujonh@gmail.com",
-    cpf: "065.123.323-54",
-    phone: "+55 85 99250-1023",
-    birthDate: "08/08/1997",
-    typeContract: "CLT",
-    status: "ativo"
-  },
-]
+import formatDateDDMMYYYY from "@/app/utils";
+import { Employer } from "@/app/schemas/schemas";
+import useContextGlobal from "@/context/contextZustand";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import AlertConfDeleteEmployer from "../alertConfDeleteEmployer/alertConfDeleteEmployer";
 
 export const columns: ColumnDef<Employer>[] = [
     {
@@ -99,39 +41,48 @@ export const columns: ColumnDef<Employer>[] = [
         },
     },
     {
-        accessorKey:"birthDate",
+        accessorKey:"dateOfBith",
         header: () => <div className="text-left font-bold text-[16px] th-title">Data de Nascimento</div>,
         cell: ({ row }) => {
-            return <div className="text-left font-[14px] font-normal">{row.getValue("birthDate")}</div>
+            return <div className="text-left font-[14px] font-normal">{formatDateDDMMYYYY(row.getValue("dateOfBith"))}</div>
         }
     },
     {
-        accessorKey: "typeContract",
+        accessorKey: "typeOfHiring",
         header: () => <div className="text-left font-bold text-[16px] th-title">Tipo Contratação</div>,
         cell: ({ row }) => {
-            return <div className="text-left font-[14px] font-normal">{row.getValue("typeContract")}</div>
+            return <div className="text-left font-[14px] font-normal">{row.getValue("typeOfHiring")}</div>
         }
     },
     {   accessorKey: "status",
         header: () => <div className="text-center font-bold text-[16px] th-title">Status</div>,
         cell: ({ row }) => {
-            const isActive = row.getValue("status") == "ativo" ;
+            const isActive = row.getValue("status");
 
-            return <div className={`${isActive ? "badgeActive" : "badgeInactive"} text-center font-[14px] font-normal capitalize`}>{row.getValue("status")}</div>
+            return <div className={`${isActive ? "badgeActive" : "badgeInactive"} text-center font-[14px] font-normal capitalize`}>{row.getValue("status") ? "Ativo": "Inativo"}</div>
         }
     },
     {
         accessorKey:"actions",
         header: () => <div className="text-center pr-3 font-bold text-[16px] th-title">Ação</div>,
-        cell: () => {
+        cell: (prop) => {
+            const router = useRouter();
+            const { employerEdit, setEmployerEdit } = useContextGlobal();
+
+            const handleEditEmployer = () => {
+                setEmployerEdit(prop.row.original);
+                router.push('/AddOrUpdate');
+            }
+
+            useEffect(() => {
+                console.log(employerEdit)
+            }, [employerEdit])
             return (
                 <div className="flex items-center gap-[8px]">
-                    <Button className="p-0 bg-white cursor-pointer hover:bg-white">
+                    <Button className="p-0 bg-white cursor-pointer hover:bg-white" onClick={() => handleEditEmployer()} data-id={JSON.stringify(prop.row.original)}>
                         <Image width={18} height={18} src={editsvg} alt="edit" />
                     </Button>
-                    <Button className="p-0 bg-white cursor-pointer hover:bg-white">
-                        <Image width={16} height={18} src={trashsvg} alt="trash" />
-                    </Button>
+                    <AlertConfDeleteEmployer employerId={prop.row.original.id}/>
                 </div>
             )
         }
