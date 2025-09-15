@@ -1,16 +1,14 @@
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
-import editsvg  from "@/static/images/svg/edit.svg";
-import trashsvg from "@/static/images/svg/trash.svg";
-
-import {
-  ColumnDef,
-} from "@tanstack/react-table"
-import formatDateDDMMYYYY from "@/app/utils";
-import { Employer } from "@/app/schemas/schemas";
-import useContextGlobal from "@/context/contextZustand";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import {
+    ColumnDef,
+} from "@tanstack/react-table"
+import { Button } from "@/components/ui/button"
+import { Employer } from "@/app/schemas/schemas";
+import Image from "next/image"
+import editsvg  from "@/static/images/svg/edit.svg";
+import formatDateDDMMYYYY from "@/app/utils";
+import useContextGlobal from "@/context/contextZustand";
 import AlertConfDeleteEmployer from "../alertConfDeleteEmployer/alertConfDeleteEmployer";
 
 export const columns: ColumnDef<Employer>[] = [
@@ -67,16 +65,14 @@ export const columns: ColumnDef<Employer>[] = [
         header: () => <div className="text-center pr-3 font-bold text-[16px] th-title">Ação</div>,
         cell: (prop) => {
             const router = useRouter();
-            const { employerEdit, setEmployerEdit } = useContextGlobal();
+            const { setEmployerEdit, setIsAddEmployer } = useContextGlobal();
 
             const handleEditEmployer = () => {
                 setEmployerEdit(prop.row.original);
+                setIsAddEmployer(false);
                 router.push('/AddOrUpdate');
             }
 
-            useEffect(() => {
-                console.log(employerEdit)
-            }, [employerEdit])
             return (
                 <div className="flex items-center gap-[8px]">
                     <Button className="p-0 bg-white cursor-pointer hover:bg-white" onClick={() => handleEditEmployer()} data-id={JSON.stringify(prop.row.original)}>
