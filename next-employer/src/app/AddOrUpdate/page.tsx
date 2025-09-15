@@ -6,10 +6,11 @@ import { ProfileForm } from "./components/form/form";
 import Image from "next/image";
 import arrowLeftSvg from "@/static/images/svg/arrow-left.svg";
 import { useRouter } from "next/navigation"
+import useContextGlobal from "@/context/contextZustand";
 
-const AddOrUpdate = ({ typeOfChange } : {typeOfChange: string}) => {
+const AddOrUpdate = () => {
     const router = useRouter();
-    const isAddEmployer = typeOfChange == "add";
+    const {isAddEmployer} = useContextGlobal();
 
     const handleBackToHome = () => {
         router.push('/');
