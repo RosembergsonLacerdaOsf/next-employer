@@ -26,6 +26,7 @@ import { addEmployer, editEmployer } from "@/api/CRUD"
 import { useEffect, useState } from "react"
 import useContextGlobal from "@/context/contextZustand"
 import { AlertMessage } from "../alertMessage/alertMessage"
+import AlertConfDeleteEmployer from "@/app/components/alertConfDeleteEmployer/alertConfDeleteEmployer"
 
 export function ProfileForm() {
     const {employerEdit, isAddEmployer} = useContextGlobal();
@@ -73,7 +74,7 @@ export function ProfileForm() {
     useEffect(() => {
         setTimeout(() => {
             setShowMsg(defaultShowMsgObj)
-        }, 5000);
+        }, 10000);
     }, [showMsg])
 
     return (
@@ -114,14 +115,24 @@ export function ProfileForm() {
                                 )}
                             />
                         ))}
-                        <Button type="submit" className="col-start-1 col-end-1 w-[111px] bg-primary-color">{isAddEmployer ? "Cadastrar" : "Salvar"}</Button>
+                        {
+                            isAddEmployer ? (
+                                <Button type="submit" className="cursor-pointer h-[32px] text-[16px] font-bold col-start-1 col-end-1 w-[111px] bg-primary-color">{isAddEmployer ? "Cadastrar" : "Salvar"}</Button>
+                            ):(
+                                <div className="flex items-center col-start-1 gap-[12px]">
+                                    <AlertConfDeleteEmployer employerId={employerEdit?.id} isEditpage={true}/>
+                                    <Button type="submit" className="cursor-pointer h-[32px] text-[16px] font-bold col-start-1 col-end-1 w-[86px] bg-primary-color">Salvar</Button>
+                                </div>
+                            )
+                        }
                     </form>
+                    <div className="mt-3">
+                        {
+                            showMsg?.isShow && <AlertMessage typeAlert={showMsg?.type} titleMsg={showMsg?.title} descriptionMsg={showMsg?.description}/>
+                        }
+                    </div>
                 </Form>
-
             </div>
-            {
-                showMsg?.isShow && <AlertMessage typeAlert={showMsg?.type} titleMsg={showMsg?.title} descriptionMsg={showMsg?.description}/>
-            }
         </>
     )
 }

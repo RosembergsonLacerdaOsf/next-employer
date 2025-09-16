@@ -26,8 +26,8 @@ const AddOrUpdate = () => {
                     Voltar
                 </Button>
 
-                <h1 className="text-[36px] color-title">{isAddEmployer ? "Adicionar" : "Editar"} Funcionário</h1>
-                <h2 className="text-[20px] color-subtitle">Empresa DoQR Tecnologia</h2>
+                <h1 className="text-[36px] color-title font-bold">{isAddEmployer ? "Adicionar" : "Editar"} Funcionário</h1>
+                <h2 className="text-[20px] color-subtitle font-bold">Empresa DoQR Tecnologia</h2>
 
                 <ProfileForm />
             </div>
